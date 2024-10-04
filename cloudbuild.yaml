@@ -1,11 +1,11 @@
 steps:
   # Step 1: Use Docker Cloud Builder to build the image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/[ethereal-fort-435120-d1]/joeljose-100904791/$_COMMIT_SHA', '.']
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/ethereal-fort-435120-d1/joeljose-100904791/$_COMMIT_SHA', '.']
 
   # Step 2: Push Docker image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/[ethereal-fort-435120-d1]/joeljose-100904791/$_COMMIT_SHA']
+    args: ['push', 'us-central1-docker.pkg.dev/ethereal-fort-435120-d1/joeljose-100904791/$_COMMIT_SHA']
 
 options:
   logging: CLOUD_LOGGING_ONLY
