@@ -3,6 +3,9 @@ steps:
     args: ['build', '-t', 'us-central1-docker.pkg.dev/ethereal-fort-435120-d1/joeljose-100904791/app:$COMMIT_SHA', '.']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/ethereal-fort-435120-d1/joeljose-100904791/app:$COMMIT_SHA']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: ['run', 'deploy', 'app', '--image', 'us-central1-docker.pkg.dev/ethereal-fort-435120-d1/joeljose-100904791/app:$COMMIT_SHA', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
  
 images:
   - 'us-central1-docker.pkg.dev/ethereal-fort-435120-d1/joeljose-100904791/app:$COMMIT_SHA'
