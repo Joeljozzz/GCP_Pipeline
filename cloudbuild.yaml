@@ -1,14 +1,53 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/ethereal-fort-435120-d1/joeljose-100904791/app:$COMMIT_SHA', '.']
+    args: ['build', '-t', 'northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:$COMMIT_SHA', '.']
+  
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/ethereal-fort-435120-d1/joeljose-100904791/app:$COMMIT_SHA']
+    args: ['push', 'northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:$COMMIT_SHA']
+  
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'gcloud'
-    args: ['run', 'deploy', 'app', '--image', 'us-central1-docker.pkg.dev/ethereal-fort-435120-d1/joeljose-100904791/app:$COMMIT_SHA', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
- 
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud run deploy joel-lab-workflow \
+        --image northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:$COMMIT_SHA \
+        --platform managed \
+        --region northamerica-northeast2 \
+        --allow-unauthenticated
+
+  - name: 'ubuntu'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "COMMIT_SHA: $COMMIT_SHA"
+        echo "SHORT_SHA: $SHORT_SHA"
+        echo "BRANCH_NAME: $BRANCH_NAME"
+        echo "REPO_NAME: $REPO_NAME"
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud auth configure-docker northamerica-northeast2-docker.pkg.dev
+        gcloud compute ssh joel-jose-flask-instance \
+          --zone=northamerica-northeast2-a \
+          --command='
+            docker pull northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:latest
+            
+            sudo docker stop special-container || true
+            sudo docker rm special-container || true
+            
+            sudo docker run -d \
+              --name special-container \
+              -p 80:5000 \
+              northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:latest
+          '
+
 images:
-  - 'us-central1-docker.pkg.dev/ethereal-fort-435120-d1/joeljose-100904791/app:$COMMIT_SHA'
+  - 'northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:$COMMIT_SHA'
 
 options:
   logging: CLOUD_LOGGING_ONLY
