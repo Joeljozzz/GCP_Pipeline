@@ -11,7 +11,7 @@ steps:
     args:
       - '-c'
       - |
-        gcloud run deploy joel-lab-workflow \
+        gcloud run deploy joeljose-cloudbuild \
         --image northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:$COMMIT_SHA \
         --platform managed \
         --region us-central1 \
