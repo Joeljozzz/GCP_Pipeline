@@ -13,7 +13,7 @@ steps:
         gcloud run deploy joel-lab-workflow \
         --image northamerica-northeast2-docker.pkg.dev/assignments-441512/joel-container/hello:$COMMIT_SHA \
         --platform managed \
-        --region northamerica-northeast2 \
+        --region us-central1 \
         --allow-unauthenticated
 
   - name: 'ubuntu'
